@@ -37,6 +37,7 @@ void draw() {
 
   f.show();
   sn.show();
+  sn.show2();
 }
 
 void keyPressed() {

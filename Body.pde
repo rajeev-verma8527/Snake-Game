@@ -93,6 +93,7 @@ class Body {
 
 
   void show() {
+    push();
     fill(255);
     noStroke();
     strokeWeight(1.0/size* 30);
@@ -115,7 +116,27 @@ class Body {
       fill(cval, 100, 100);
       rect(arr.get(i).x * grid, arr.get(i).y * grid, grid, grid);
     }
+    pop();
   }
+
+  void show2() {
+    for (int i = 0; i< arr.size() - 1; i++)
+      smear(arr.get(i), arr.get(i+1));
+    }
+
+    void smear(Vector a, Vector b) {
+      final int offset = 10;
+      push();
+      colorMode(RGB);
+      fill(255);
+      stroke(255);
+      strokeWeight(10);
+      rect(a.x* grid + grid/2 - offset, a.y* grid + grid/2 - offset, 
+        (b.x - a.x)* grid + offset, (b.y - a.y)* grid + offset );   
+      //line(a.x * grid,a.y * grid,b.x* grid, b.y* grid);
+      
+      pop();
+    }
 }
 enum Dir { 
   // enum for Directions of the snake
