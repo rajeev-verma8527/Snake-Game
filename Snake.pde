@@ -3,9 +3,9 @@ Body sn;
 Food f;
 int size = 30; // number of rows/columns
 int grid; // size of each block in  pixels
-int speed = 8;  //block per second
+int speed = 4;  //block per second
 int framerate = 24; // internal framerate is not consistent resulting in varying speed
-
+boolean paused = false;
 void setup() {
   size(805, 805);
   grid = width/size;
@@ -18,7 +18,9 @@ void setup() {
 
 
 void draw() {
+  if ( paused) return;
   background(0);
+
   //If food eaten
   if (f.eaten) spawnFood();
 
@@ -32,20 +34,24 @@ void draw() {
     sn.grow();
   }
 
- 
- 
+
+  //println(sn.arr.size());
 
   f.show();
-  sn.show();
+  //sn.show();
   sn.show2();
 }
 
 void keyPressed() {
-
-  if (keyCode == LEFT) sn.updateDir(Dir.L);
-  else if (keyCode == RIGHT) sn.updateDir(Dir.R);
-  else if (keyCode == UP) sn.updateDir(Dir.U);
-  else if (keyCode == DOWN) sn.updateDir(Dir.D);
+  if (!paused) {
+    if (keyCode == LEFT) sn.updateDir(Dir.L);
+    else if (keyCode == RIGHT) sn.updateDir(Dir.R);
+    else if (keyCode == UP) sn.updateDir(Dir.U);
+    else if (keyCode == DOWN) sn.updateDir(Dir.D);
+  }
+  if (keyCode == ' ')
+    if (paused) paused = false;
+    else paused = true;
 }
 
 

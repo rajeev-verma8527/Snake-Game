@@ -9,7 +9,7 @@ class Body {
 
   Body() {
     for (float y =size*0.5 + 4; y> size*0.5; y--) {
-      arr.add(new Vector(int(size/2), int(y)));
+      arr.add(new Vector(int(size/2), int(y), Dir.U));
     }
     head =arr.get(arr.size() -1 );
   }
@@ -57,7 +57,7 @@ class Body {
     newY %= size + 1;
     if (newX <= -1) newX = size ;
     if (newY <= -1) newY = size ;
-    arr.add(new Vector(newX, newY));
+    arr.add(new Vector(newX, newY, this.dir));
 
 
     // removing the tail if not growing
@@ -120,23 +120,61 @@ class Body {
   }
 
   void show2() {
-    for (int i = 0; i< arr.size() - 1; i++)
-      smear(arr.get(i), arr.get(i+1));
-    }
 
-    void smear(Vector a, Vector b) {
-      final int offset = 10;
-      push();
-      colorMode(RGB);
-      fill(255);
-      stroke(255);
-      strokeWeight(10);
-      rect(a.x* grid + grid/2 - offset, a.y* grid + grid/2 - offset, 
-        (b.x - a.x)* grid + offset, (b.y - a.y)* grid + offset );   
-      //line(a.x * grid,a.y * grid,b.x* grid, b.y* grid);
-      
-      pop();
+
+    Vector first = arr.get(0);
+    Vector second = arr.get(1);
+    Vector last = arr.get(arr.size()- 1);
+    Vector scndLast = arr.get(arr.size() -2);
+    
+    block(first, first.compare(second));
+    block(last, last.compare(scndLast));
+    
+
+    for (int i = 1; i< arr.size() - 1; i++) {
+      Vector current = arr.get(i);
+      block(current, current.compare(arr.get(i-1)));
+      block(current, current.compare(arr.get(i+1)));
     }
+  }
+
+  void block(Vector v, Dir dir) {
+    int thickness = 8, w = 0, h = 0, blockX = 0, blockY= 0;
+    int x = v.x * grid;
+    int y = v.y * grid;
+    switch(dir) {
+    case U:
+      blockX = x + grid/2 - thickness;
+      blockY = y;
+      w = thickness*2;
+      h = grid/2 + thickness;
+      break;
+    case D:
+      blockX = x + grid/2 - thickness;
+      blockY = y + grid/2 - thickness;
+      w = thickness*2;
+      h = grid/2 + thickness;
+      break;
+    case L:
+      blockX = x;
+      blockY = y + grid/2 - thickness;
+      w = grid/2 + thickness;
+      h = thickness*2;
+      break;
+    case R:
+      blockX = x + grid/2 - thickness;
+      blockY = y + grid/2 - thickness;
+      w = grid/2 + thickness;
+      h = thickness*2;
+    }
+    push();
+    //rectMode(CENTER);
+    colorMode(RGB);
+    fill(255);
+    //stroke(255, 0, 0);
+    rect(blockX, blockY, w, h);
+    pop();
+  }
 }
 enum Dir { 
   // enum for Directions of the snake
@@ -147,21 +185,26 @@ class Vector {
 
   // A Vector class for holding rows and columns
 
-  final int x;
-  final int y;
+  final int x; 
+  final int y; 
+  final Dir dir;
 
-  Vector(int x, int y) {
+  Vector(int x, int y, Dir d) {
     this.x = x; 
     this.y = y;
+    this.dir = d;
   }
   boolean equals(Vector v) {
     return this.x == v.x && this.y == v.y;
   }
 
-  Vector add( Vector v) {
-    int x = this.x + v.x;
-    int y = this.y + v.y;
-    return new Vector(x, y);
+  Dir compare( Vector v) {
+    Dir ret = this.dir;
+    if ( this.x == v.x)
+      ret =  (v.y < this.y) ? Dir.U : Dir.D;
+    if ( this.y == v.y)
+      ret =  (v.x < this.x) ? Dir.L : Dir.R;
+    return ret;
   }
 
   void show() {
@@ -170,16 +213,16 @@ class Vector {
 }
 
 class Food {
-  int x, y;
-  boolean eaten = false;
+  int x, y; 
+  boolean eaten = false; 
   Food(int r, int c) {
-    x=c;
+    x=c; 
     y=r;
   }
 
   void show() {
-    fill(150, 0, 150);
-    noStroke();
+    fill(150, 0, 150); 
+    noStroke(); 
     rect(x* grid, y* grid, grid, grid);
   }
 }
