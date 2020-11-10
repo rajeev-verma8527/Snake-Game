@@ -1,10 +1,10 @@
 
 Body sn;
 Food f;
-int size = 20; // number of rows/columns
+final int size = 20; // number of rows/columns
 int grid; // size of each block in  pixels
-int speed = 4;  //block per second
-int framerate = 24; // internal framerate is not consistent resulting in varying speed
+final int speed = 4;  //block per second
+final int framerate = 24; // constant for calculating effective snake speed.
 boolean paused = false;
 int snakeWidth = 9;
 void setup() {
