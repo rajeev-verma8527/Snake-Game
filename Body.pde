@@ -6,9 +6,10 @@ class Body {
   int index = -1;
   boolean growing = false;
   Vector head ; 
+  boolean gameOver = false;
 
   Body() {
-    for (float y =size*0.5 + 4; y> size*0.5; y--) {
+    for (float y =size*0.5 + 3; y> size*0.5; y--) {
       arr.add(new Vector(int(size/2), int(y), Dir.U));
     }
     head =arr.get(arr.size() -1 );
@@ -16,6 +17,7 @@ class Body {
 
 
   void move() {
+
     int xOffset = 0, yOffset = 0;
 
     // checking direction list
@@ -90,6 +92,20 @@ class Body {
     // produces 1, 5 respectively
   }
 
+  boolean win() {
+    return this.arr.size() == size*size;
+  }
+
+  boolean hit() {
+    
+    Vector front = this.arr.get(arr.size()-1);
+    println(head,front);
+    for ( int i = 0; i < this.arr.size() -1; i++) {
+      if (front.equals(arr.get(i)))
+        return true;
+    }
+    return false;
+  }
 
 
   void show() {
@@ -126,10 +142,10 @@ class Body {
     Vector second = arr.get(1);
     Vector last = arr.get(arr.size()- 1);
     Vector scndLast = arr.get(arr.size() -2);
-    
+
     block(first, first.compare(second));
     block(last, last.compare(scndLast));
-    
+
 
     for (int i = 1; i< arr.size() - 1; i++) {
       Vector current = arr.get(i);
@@ -139,7 +155,7 @@ class Body {
   }
 
   void block(Vector v, Dir dir) {
-    int thickness = 8, w = 0, h = 0, blockX = 0, blockY= 0;
+    int thickness = snakeWidth, w = 0, h = 0, blockX = 0, blockY= 0;
     int x = v.x * grid;
     int y = v.y * grid;
     switch(dir) {
@@ -207,8 +223,8 @@ class Vector {
     return ret;
   }
 
-  void show() {
-    println(this.x, this.y);
+  String toString() {
+    return Integer.toString(this.x) + ',' +  Integer.toString(this.y) + ' ';
   }
 }
 

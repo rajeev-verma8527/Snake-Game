@@ -1,11 +1,12 @@
 
 Body sn;
 Food f;
-int size = 30; // number of rows/columns
+int size = 20; // number of rows/columns
 int grid; // size of each block in  pixels
 int speed = 4;  //block per second
 int framerate = 24; // internal framerate is not consistent resulting in varying speed
 boolean paused = false;
+int snakeWidth = 9;
 void setup() {
   size(805, 805);
   grid = width/size;
@@ -26,6 +27,10 @@ void draw() {
 
   // Adjusting for different framerate
   if (frameCount %(framerate/speed) == 0) {
+    if (sn.hit() || sn.win()) {
+      paused = true;
+      sn = new Body();
+    }
     sn.move();
   }
 
@@ -35,10 +40,10 @@ void draw() {
   }
 
 
-  //println(sn.arr.size());
 
   f.show();
   //sn.show();
+
   sn.show2();
 }
 
@@ -49,9 +54,13 @@ void keyPressed() {
     else if (keyCode == UP) sn.updateDir(Dir.U);
     else if (keyCode == DOWN) sn.updateDir(Dir.D);
   }
-  if (keyCode == ' ')
+  if (keyCode == ' ' && !sn.gameOver)
     if (paused) paused = false;
     else paused = true;
+
+  if (keyCode == ' ' && sn.gameOver) {
+    sn = new Body();
+  }
 }
 
 
