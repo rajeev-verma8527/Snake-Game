@@ -57,8 +57,8 @@ class Body {
     int newY   = head.y + yOffset;
     newX %= size + 1;
     newY %= size + 1;
-    if (newX <= -1) newX = size ;
-    if (newY <= -1) newY = size ;
+    if (newX < 0) newX = size ;
+    if (newY < 0) newY = size ;
     arr.add(new Vector(newX, newY, this.dir));
 
 

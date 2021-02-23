@@ -8,7 +8,7 @@ final int framerate = 24; // constant for calculating effective snake speed.
 boolean paused = false;
 int snakeWidth = 9;
 void setup() {
-  size(805, 805);
+  size(850, 850);
   grid = width/size;
 
   sn = new Body();
